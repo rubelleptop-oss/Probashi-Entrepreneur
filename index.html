@@ -60,7 +60,24 @@ footer{padding-bottom:110px}footer p{margin:6px 0}
 .thx{text-align:center}.thx .ok{width:84px;height:84px;border-radius:50%;background:#25d366;color:#fff;font-size:50px;line-height:84px;margin:0 auto 18px}
 .thx p{margin:10px 0}
 [hidden]{display:none!important}
-</style></head><body>
+</style><!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2388897125200833');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2388897125200833&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+</head><body>
 <div id="home">
 
 <header class="hero"><div class="w hg">
@@ -111,6 +128,7 @@ footer{padding-bottom:110px}footer p{margin:6px 0}
    <p style="margin:0">বিকাশ অ্যাপে <b>সেন্ড মানি</b> করুন <b>৳<span data-bdt></span></b> এই নম্বরে:</p>
    <div class="num"><span>+880 1603-251636</span><button type="button" id="cp">কপি করুন</button></div>
   </div>
+  <div class="step"><h3>🌍 বিদেশ থেকে পাঠাচ্ছেন?</h3><p style="margin:0">দুইটি সহজ উপায়:</p><ol style="padding-left:22px;margin:8px 0 0"><li>দেশে পরিবারের কাউকে বলুন উপরের নম্বরে <b>৳<span data-bdt></span></b> বিকাশ করে দিতে। তারপর TrxID নিয়ে নিচের ফর্ম পূরণ করুন।</li><li>অথবা মোবাইল অ্যাপ <b>TapTap Send</b>, <b>Ace Money Transfer</b> বা <b>Remit Choice</b> দিয়ে ওই বিকাশ নম্বরে টাকা পাঠান। পুরো ৳<span data-bdt></span> যেন পৌঁছায়, অ্যাপের ফি আলাদা ধরবেন।</li></ol><p style="margin:10px 0 0"><b>অ্যাপ দিয়ে পাঠালে রিসিট (স্ক্রিনশট) WhatsApp-এ পাঠান।</b> সেক্ষেত্রে নিচের ফর্ম পূরণ করতে হবে না।</p><a class="btn wa" style="margin:12px 0 0" data-wa="আসসালামু আলাইকুম, আমি অ্যাপ দিয়ে টাকা পাঠিয়েছি। রিসিট পাঠাচ্ছি।" href="#">রিসিট WhatsApp-এ পাঠান</a></div>
   <div class="step"><h3>ধাপ ২: নিচের ফর্ম পূরণ করুন</h3>
    <form class="fm" id="of" method="POST" action="https://script.google.com/macros/s/AKfycbxukSXiHbUYgqvNfOyQugpmd5U95GzOw_8Rm9d2urdAisFKq6jJHuO12dSEoYwcyW-o/exec" target="sink">
     <input type="hidden" name="amount" value="699"><input type="hidden" name="book" value="Financial Freedom ই-বুক">
@@ -183,6 +201,7 @@ document.querySelectorAll('[data-bdt]').forEach(e=>e.textContent=CFG.bdt);
 const wa=t=>'https://wa.me/'+CFG.wa+'?text='+encodeURIComponent(t);
 function bindWa(root){(root||document).querySelectorAll('[data-wa]').forEach(a=>{a.href=wa(a.dataset.wa);a.target='_blank';a.rel='noopener'})}
 bindWa();
+document.addEventListener('click',e=>{if(e.target.closest('[data-wa]'))window.fbq&&fbq('track','Contact')});
 document.getElementById('cp').onclick=async e=>{
  try{await navigator.clipboard.writeText('01603251636');e.target.textContent='কপি হয়েছে ✓'}
  catch(x){e.target.textContent='নম্বরটি চেপে ধরে কপি করুন'}};
@@ -201,6 +220,7 @@ f.addEventListener('submit',()=>{
  const d=new FormData(f);
  const msg='আসসালামু আলাইকুম, আমি অর্ডার দিয়েছি। নাম: '+d.get('name')+', WhatsApp: '+d.get('whatsapp')+', বিকাশ TrxID: '+d.get('trxid');
  const tw=document.getElementById('tw');tw.dataset.wa=msg;bindWa(tw.parentNode);
+ window.fbq&&fbq('track','Lead');
  const b=document.getElementById('sb');b.disabled=true;b.textContent='অর্ডার পাঠানো হচ্ছে...';
  setTimeout(()=>{b.disabled=false;b.textContent='অর্ডার কনফার্ম করুন';f.reset();location.hash='thanks'},1600);
 });
