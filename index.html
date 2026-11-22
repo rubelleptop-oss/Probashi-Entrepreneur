@@ -26,6 +26,7 @@ body{font-family:system-ui,-apple-system,'Segoe UI','Noto Sans Bengali',Kalpurus
 .tbn,.etb{border:2px solid #fff;color:#fff;border-radius:8px;padding:6px 10px;font-weight:700;font-size:14px;flex:none}.tbn.on{background:#ffd617;color:#0e4194;border-color:#ffd617}
 .exs{display:block;width:100%;text-align:left;border:1.5px solid #c5cfdd;border-radius:10px;padding:8px 10px;margin-top:8px;background:#fff;font-size:14px}.exs:active{background:#e8eefb}
 #edoc{background:#fff;color:#1f2937;max-width:794px;margin:12px auto;padding:18px;min-height:70vh;outline:none;font:14px/1.45 Arial,sans-serif;overflow-wrap:anywhere}#edoc h1{font-size:1.9em;font-weight:700;margin:0 0 4px}#edoc h2{font-size:1.15em;font-weight:700;margin:14px 0 4px;border-bottom:1px solid #94a3b8}#edoc img{max-width:100%}#edoc p{margin:3px 0}#edoc td{vertical-align:top;padding:2px 6px}#edoc table{border-collapse:collapse;width:100%}#edoc ul{list-style:disc;padding-left:22px}#edoc ol{list-style:decimal;padding-left:22px}#edoc strong,#edoc b{font-weight:700}
+#edoc.pdfm,#edoc.dxm{padding:0;background:none;max-width:none;min-height:0;width:max-content;margin:8px auto}.pgx{position:relative;background:#fff;margin:0 auto 10px;overflow:hidden}.pgx img{display:block;max-width:none}.pgx span{position:absolute;white-space:pre;font-family:Arial,Helvetica,sans-serif;line-height:1.15;outline:none;cursor:text}.pgx span:focus{background:rgba(255,235,59,.4)}
 footer summary{cursor:pointer;font-weight:700;padding:6px 0;color:#fff}footer details p{padding:4px 0 8px}
 </style>
 </head>
@@ -82,12 +83,20 @@ footer summary{cursor:pointer;font-weight:700;padding:6px 0;color:#fff}footer de
   <p class="text-center text-xs text-white px-4 pb-6">In the print window choose "Save as PDF". <span class="bn" style="color:#e6edf9">প্রিন্ট উইন্ডোতে "Save as PDF" বেছে নিন।</span></p>
 </div>
 
+<div id="chm" class="hidden" style="position:fixed;inset:0;z-index:60;background:rgba(15,23,42,.6);display:flex;align-items:center;justify-content:center;padding:16px">
+  <div class="bg-white rounded-2xl p-4 w-full" style="max-width:420px">
+    <h2 class="text-lg font-bold text-[#0e4194]"><span data-k="chh">How do you want to edit your CV?</span><span class="bn">আপনার সিভি কীভাবে এডিট করতে চান?</span></h2>
+    <button id="ch1" class="btn w-full mt-3 bg-[#0e4194] text-white text-left"><span data-k="ch1">Keep my CV’s own design</span><span class="bn">আমার সিভির নিজের ডিজাইন রেখে এডিট করব</span></button>
+    <button id="ch2" class="btn w-full mt-3 border-2 border-[#0e4194] text-[#0e4194] text-left"><span data-k="ch2">Use one of your designs (choose a template)</span><span class="bn">আপনাদের ডিজাইনগুলো থেকে একটা বেছে নেব</span></button>
+    <button id="ch3" class="w-full mt-3 text-sm text-slate-600"><span data-k="ch3">Cancel</span> · বাতিল</button>
+  </div>
+</div>
 <div id="edm" class="hidden">
   <div class="sticky top-0 z-10 p-3 bg-[#0e4194]">
     <div class="flex gap-2">
       <button id="edx" class="btn bg-white text-[#0e4194]"><span data-k="bk">Back to edit</span><span class="bn">ফিরে যান</span></button>
       <button id="edp" class="btn ml-auto bg-[#ffd617] text-[#0e4194]"><span data-k="dl">Download PDF</span><span class="bn">PDF ডাউনলোড</span></button>
-      <button id="edw" class="btn bg-white text-[#0e4194]">Word<span class="bn">.doc</span></button>
+      
     </div>
     <div class="flex gap-2 mt-2 overflow-x-auto">
       <button type="button" class="etb" data-c="bold"><b>B</b></button><button type="button" class="etb" data-c="italic"><i>I</i></button><button type="button" class="etb" data-c="underline"><u>U</u></button><button type="button" class="etb" data-c="insertUnorderedList">•</button><button type="button" class="etb" data-c="undo">↶</button><button type="button" class="etb" data-c="redo">↷</button><button type="button" class="etb" data-c="fs-">A−</button><button type="button" class="etb" data-c="fs+">A+</button>
@@ -155,8 +164,12 @@ ib:'Fill the form from my CV file|Compila il modulo dal mio file CV|Remplir le f
 inn:'Your file stays on your phone. After filling, check every box yourself.|Il file resta sul tuo telefono. Dopo la compilazione controlla tu ogni campo.|Le fichier reste sur votre téléphone. Après le remplissage, vérifiez chaque champ.|El archivo se queda en tu móvil. Tras rellenar, revisa cada campo.|Die Datei bleibt auf Ihrem Handy. Prüfen Sie nach dem Ausfüllen jedes Feld selbst.|O ficheiro fica no seu telemóvel. Depois de preencher, verifique cada campo.',
 rl2:'Another job you want|Un altro lavoro che cerchi|Un autre emploi recherché|Otro trabajo que buscas|Eine weitere gesuchte Stelle|Outro emprego que procura',
 ar:'+ Add another job (max 4)|+ Aggiungi un altro lavoro (max 4)|+ Ajouter un autre emploi (max 4)|+ Añadir otro trabajo (máx. 4)|+ Weitere Stelle hinzufügen (max. 4)|+ Adicionar outro emprego (máx. 4)',
-ie1:'Edit my CV as it is (keeps the layout)|Modifica il mio CV così com’è (mantiene il layout)|Modifier mon CV tel quel (garde la mise en page)|Editar mi CV tal como está (mantiene el diseño)|Meinen Lebenslauf so bearbeiten (Layout bleibt)|Editar o meu CV tal como está (mantém o layout)',
-ie2:'Word (.docx) keeps the layout. A PDF gives plain text to edit.|Word (.docx) mantiene il layout. Il PDF dà solo il testo da modificare.|Word (.docx) garde la mise en page. Le PDF donne seulement le texte à modifier.|Word (.docx) mantiene el diseño. El PDF solo da el texto para editar.|Word (.docx) behält das Layout. Bei PDF erhalten Sie nur Text zum Bearbeiten.|Word (.docx) mantém o layout. O PDF dá apenas o texto para editar.',
+ie1:'Edit my CV (keep its design or choose a new one)|Modifica il mio CV (mantieni il suo design o scegline uno nuovo)|Modifier mon CV (garder sa mise en page ou en choisir une nouvelle)|Editar mi CV (mantener su diseño o elegir uno nuevo)|Meinen Lebenslauf bearbeiten (Design behalten oder neues wählen)|Editar o meu CV (manter o design ou escolher um novo)',
+ie2:'Works with PDF or Word (.docx) files that contain real text.|Funziona con PDF o Word (.docx) con testo reale.|Fonctionne avec des PDF ou Word (.docx) contenant du vrai texte.|Funciona con PDF o Word (.docx) con texto real.|Funktioniert mit PDF- oder Word-Dateien (.docx) mit echtem Text.|Funciona com PDF ou Word (.docx) com texto real.',
+chh:'How do you want to edit your CV?|Come vuoi modificare il tuo CV?|Comment voulez-vous modifier votre CV ?|¿Cómo quieres editar tu CV?|Wie möchten Sie Ihren Lebenslauf bearbeiten?|Como quer editar o seu CV?',
+ch1:'Keep my CV’s own design|Mantieni il design del mio CV|Garder la mise en page de mon CV|Mantener el diseño de mi CV|Das Design meines Lebenslaufs behalten|Manter o design do meu CV',
+ch2:'Use one of your designs (choose a template)|Usa uno dei vostri design (scegli un modello)|Utiliser un de vos modèles (au choix)|Usar uno de vuestros diseños (elegir plantilla)|Eines Ihrer Designs verwenden (Vorlage wählen)|Usar um dos vossos designs (escolher modelo)',
+ch3:'Cancel|Annulla|Annuler|Cancelar|Abbrechen|Cancelar',
 ie3:'Tap the text and edit it directly.|Tocca il testo e modificalo direttamente.|Touchez le texte et modifiez-le directement.|Toca el texto y edítalo directamente.|Tippen Sie auf den Text und bearbeiten Sie ihn direkt.|Toque no texto e edite diretamente.',
 ie4:'PDF layout and photo cannot be kept, only the text.|Layout e foto del PDF non si possono mantenere, solo il testo.|La mise en page et la photo du PDF ne sont pas conservées, seulement le texte.|El diseño y la foto del PDF no se conservan, solo el texto.|Layout und Foto des PDFs bleiben nicht erhalten, nur der Text.|O layout e a foto do PDF não são mantidos, apenas o texto.',
 ird:'Reading your CV…|Lettura del CV in corso…|Lecture du CV…|Leyendo el CV…|CV wird gelesen…|A ler o CV…',
@@ -242,8 +255,8 @@ $('#lang').innerHTML=CVL.map(c=>`<option value="${c}">${dn(c,c)} · ${dn('bn',c)
 $('#app').innerHTML=`
 <section class="card" style="border:2px dashed #0e4194"><h2>${tt('iu','আগের সিভি থাকলে আপলোড করুন, ফর্ম নিজে নিজে পূরণ হয়ে যাবে')}</h2>
 <label class="btn block mt-3 bg-[#0e4194] text-white cursor-pointer">${tt('ib','সিভি ফাইল বেছে নিন (PDF, Word বা TXT)')}<input id="cvf" type="file" accept=".pdf,.docx,.txt,application/pdf" class="hidden"></label>
-<label class="btn block mt-3 border-2 border-[#0e4194] text-[#0e4194] cursor-pointer">${tt('ie1','আমার সিভি যেমন আছে তেমনই এডিট করব (ডিজাইন ঠিক থাকবে)')}<input id="cve" type="file" accept=".pdf,.docx,.txt,application/pdf" class="hidden"></label>
-<p class="mt-2 text-xs text-slate-600">${tt('ie2','Word (.docx) দিলে ডিজাইন ঠিক থাকে। PDF দিলে শুধু লেখা এডিট করা যায়।')}</p>
+<label class="btn block mt-3 border-2 border-[#0e4194] text-[#0e4194] cursor-pointer">${tt('ie1','আমার সিভি এডিট করব (নিজের ডিজাইন রেখে অথবা নতুন ডিজাইনে)')}<input id="cve" type="file" accept=".pdf,.docx,.txt,application/pdf" class="hidden"></label>
+<p class="mt-2 text-xs text-slate-600">${tt('ie2','লেখাসহ PDF বা Word (.docx) ফাইল দিন।')}</p>
 <p id="ist" class="mt-3 text-sm font-semibold"></p><p class="mt-2 text-xs text-slate-600">${tt('inn','ফাইল আপনার ফোনেই থাকে। ফর্ম পূরণ হওয়ার পর প্রতিটি ঘর নিজে দেখে নিন।')}</p></section>
 <section class="card"><h2>1. ${tt('s2','ব্যক্তিগত তথ্য')}</h2>
 ${fld('nm','nm','পুরো নাম (পাসপোর্টের মতো), যেমন: Mohammad Rahman','text','Mohammad Rahman')}
@@ -402,28 +415,64 @@ $('#cvf').onchange=async e=>{const f=e.target.files[0];if(!f)return;const st=$('
   catch(x){st.innerHTML=tr('ier')+'<span class="bn" style="color:#b91c1c">ফাইল থেকে লেখা পড়া যায়নি। ছবি বা স্ক্যান নয়, লেখাসহ PDF বা Word (.docx) ফাইল দিন।</span>';st.style.color='#b91c1c'}
   e.target.value=''};
 
-/* ---------- edit an existing CV directly (keeps Word layout) ---------- */
-let edSize=14;
-const ESTY='body{font-family:Arial,Helvetica,sans-serif;color:#1f2937;line-height:1.45}h1{font-size:1.9em;margin:0 0 4px}h2{font-size:1.15em;margin:14px 0 4px;border-bottom:1px solid #94a3b8;padding-bottom:2px}p{margin:3px 0}img{max-width:100%}table{border-collapse:collapse;width:100%}td{vertical-align:top;padding:2px 6px}ul{list-style:disc;padding-left:22px}ol{list-style:decimal;padding-left:22px}@page{size:A4;margin:14mm}';
-const txt2html=t=>t.replace(/\r/g,'').split('\n').map(x=>x.trim()).filter(Boolean).map((l,i)=>i===0&&l.length<50?`<h1>${esc(l)}</h1>`:hdr(l)?`<h2>${esc(l)}</h2>`:`<p>${esc(l)}</p>`).join('');
-const openEd=()=>{$('#edoc').style.fontSize=edSize+'px';$('#edm').classList.remove('hidden');document.body.style.overflow='hidden';$('#edm').scrollTop=0};
+/* ---------- edit an existing CV: keep its own design, or move it into our designs ---------- */
+let edMode='',edPg=null,pz=1,pend=null;
+const JSZ='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',DXP='https://cdn.jsdelivr.net/npm/docx-preview@0.3.3/dist/docx-preview.min.js';
+const applyZ=()=>{$('#edoc').style.zoom=pz};
+const openEd=m=>{edMode=m;const el=$('#edoc');el.className=m;el.contentEditable=m==='pdfm'?'false':'true';applyZ();$('#edn').textContent=tr('ie3');$('#edm').classList.remove('hidden');document.body.style.overflow='hidden';$('#edm').scrollTop=0};
+const lumi=c=>c[0]*.3+c[1]*.59+c[2]*.11;
+async function buildPdf(f){
+  const B='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';await loadJs(B+'pdf.min.js');pdfjsLib.GlobalWorkerOptions.workerSrc=B+'pdf.worker.min.js';
+  const pdf=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise,sc=1.5;let html='',total=0,pg=null;
+  for(let i=1;i<=pdf.numPages;i++){
+    const page=await pdf.getPage(i),vp=page.getViewport({scale:sc}),cv=document.createElement('canvas');cv.width=Math.ceil(vp.width);cv.height=Math.ceil(vp.height);
+    const cx=cv.getContext('2d',{willReadFrequently:true});await page.render({canvasContext:cx,viewport:vp}).promise;
+    const tc=await page.getTextContent();
+    const its=tc.items.filter(t=>t.str&&t.str.trim()).map(t=>{const m=pdfjsLib.Util.transform(vp.transform,t.transform);return{s:t.str,x:m[4],y:m[5],h:Math.hypot(m[2],m[3]),w:t.width*sc}});
+    const lines=[];its.sort((a,b)=>a.y-b.y).forEach(t=>{const L=lines.find(l=>Math.abs(l.y-t.y)<Math.max(2,t.h*.3));L?L.t.push(t):lines.push({y:t.y,t:[t]})});
+    const runs=[];lines.forEach(l=>{l.t.sort((a,b)=>a.x-b.x);let r=null;l.t.forEach(t=>{const gap=r?t.x-(r.x+r.w):0;
+      if(r&&gap<t.h*1.2&&Math.abs(t.h-r.h)<1.5){r.s+=(gap>t.h*.15&&!/\s$/.test(r.s)&&!/^\s/.test(t.s)?' ':'')+t.s;r.w=t.x+t.w-r.x}else{r={...t};runs.push(r)}})});
+    const px=(x,y)=>{x=Math.max(0,Math.min(cv.width-1,Math.round(x)));y=Math.max(0,Math.min(cv.height-1,Math.round(y)));const d=cx.getImageData(x,y,1,1).data;return[d[0],d[1],d[2]]};
+    runs.forEach(r=>{const y=r.y-r.h*.3,a=px(r.x-3,y),b=px(r.x+r.w+3,y);r.bg=lumi(a)>=lumi(b)?a:b;
+      const x0=Math.max(0,Math.floor(r.x)),y0=Math.max(0,Math.floor(r.y-r.h*.95)),w=Math.max(1,Math.min(cv.width-x0,Math.ceil(r.w))),h=Math.max(1,Math.min(cv.height-y0,Math.ceil(r.h*1.2)));
+      const d=cx.getImageData(x0,y0,w,h).data,dark=lumi(r.bg)<128;let m=dark?-1:999,c=dark?[255,255,255]:[17,17,17];
+      for(let k=0;k<d.length;k+=4){if(!d[k+3])continue;const l=lumi([d[k],d[k+1],d[k+2]]);if(dark?l>m:l<m){m=l;c=[d[k],d[k+1],d[k+2]]}}r.c=c});
+    runs.forEach(r=>{cx.fillStyle='rgb('+r.bg+')';cx.fillRect(r.x-1,r.y-r.h*.95,r.w+2,r.h*1.2)});
+    total+=runs.length;if(!pg)pg={w:cv.width,h:cv.height};
+    html+='<div class="pgx" style="width:'+cv.width+'px;height:'+cv.height+'px"><img alt="" src="'+cv.toDataURL('image/jpeg',.9)+'" width="'+cv.width+'" height="'+cv.height+'">'+runs.map(r=>'<span contenteditable="true" style="left:'+r.x.toFixed(1)+'px;top:'+(r.y-r.h*.95).toFixed(1)+'px;font-size:'+r.h.toFixed(1)+'px;color:rgb('+r.c+')">'+esc(r.s)+'</span>').join('')+'</div>';
+  }
+  if(total<5)throw 0;return{html,pg}}
+async function editOwn(f){
+  const n=f.name.toLowerCase(),el=$('#edoc'),st=$('#ist');
+  try{
+    if(n.endsWith('.pdf')){const r=await buildPdf(f);el.innerHTML=r.html;edPg=r.pg;pz=Math.min(1,(innerWidth-16)/r.pg.w);openEd('pdfm')}
+    else{el.innerHTML='';await loadJs(JSZ);await loadJs(DXP);await docx.renderAsync(await f.arrayBuffer(),el,el,{inWrapper:true,breakPages:true});if(el.textContent.trim().length<20)throw 0;
+      pz=Math.min(1,(innerWidth-16)/((el.querySelector('section.docx')||{}).offsetWidth||794));openEd('dxm')}
+    st.innerHTML=''}
+  catch(x){st.innerHTML='Could not keep the design of this file, so we use our designs.<span class="bn">এই ফাইলের ডিজাইন রাখা গেল না, তাই আমাদের ডিজাইনে খোলা হচ্ছে।</span>';await editOurs(f,1)}}
+async function editOurs(f,keep){
+  const st=$('#ist');
+  try{const t=await readCv(f);if(!t||t.replace(/\s/g,'').length<40)throw 0;fillCv(parseCv(t));
+    if(!keep)st.innerHTML=tr('iok')+'<span class="bn" style="color:#166534">ফর্ম পূরণ হয়েছে। প্রতিটি ঘর ভালো করে দেখুন এবং ভুল থাকলে ঠিক করুন।</span>';
+    st.style.color=keep?'#92400e':'#166534';
+    if($('.nm').value.trim())openPv();else $('#app').scrollIntoView({behavior:'smooth'})}
+  catch(x){st.innerHTML=tr('ier')+'<span class="bn" style="color:#b91c1c">ফাইল থেকে লেখা পড়া যায়নি। ছবি বা স্ক্যান নয়, লেখাসহ PDF বা Word (.docx) ফাইল দিন।</span>';st.style.color='#b91c1c'}}
+$('#cve').onchange=e=>{const f=e.target.files[0];e.target.value='';if(!f)return;pend=f;$('#ist').innerHTML='';$('#ist').style.color='';
+  const n=f.name.toLowerCase();if(n.endsWith('.pdf')||n.endsWith('.docx'))$('#chm').classList.remove('hidden');else{$('#ist').innerHTML=tr('ird');editOurs(f)}};
+$('#ch1').onclick=()=>{$('#chm').classList.add('hidden');$('#ist').innerHTML=tr('ird');editOwn(pend)};
+$('#ch2').onclick=()=>{$('#chm').classList.add('hidden');$('#ist').innerHTML=tr('ird');editOurs(pend)};
+$('#ch3').onclick=()=>$('#chm').classList.add('hidden');
 $('#edx').onclick=()=>{$('#edm').classList.add('hidden');document.body.style.overflow=''};
 $('#edm').addEventListener('mousedown',e=>{if(e.target.closest('.etb'))e.preventDefault()});
 $('#edm').addEventListener('click',e=>{const b=e.target.closest('.etb');if(!b)return;const c=b.dataset.c;
-  if(c==='fs-'||c==='fs+'){edSize=Math.max(10,Math.min(22,edSize+(c==='fs+'?1:-1)));$('#edoc').style.fontSize=edSize+'px'}else document.execCommand(c)});
-$('#edp').onclick=()=>{let f=$('#pfr');if(!f){f=document.createElement('iframe');f.id='pfr';f.style.cssText='position:fixed;width:0;height:0;border:0';document.body.appendChild(f)}
+  if(c==='fs-'||c==='fs+'){pz=Math.max(.3,Math.min(2.5,pz+(c==='fs+'?.1:-.1)));applyZ()}else document.execCommand(c)});
+$('#edp').onclick=()=>{let html;
+  if(edMode==='pdfm'){const k=793.7/edPg.w,W=edPg.w*k,H=edPg.h*k;
+    html='<style>@page{size:'+W+'px '+H+'px;margin:0}body{margin:0}.pw{width:'+W+'px;height:'+H+'px;overflow:hidden;page-break-after:always}.pw:last-child{page-break-after:auto}.pi{position:relative;width:'+edPg.w+'px;height:'+edPg.h+'px;transform:scale('+k+');transform-origin:0 0}.pi img{display:block;max-width:none}.pi span{position:absolute;white-space:pre;font-family:Arial,Helvetica,sans-serif;line-height:1.15}</style>'+$$('#edoc .pgx').map(p=>'<div class="pw"><div class="pi">'+p.innerHTML+'</div></div>').join('')}
+  else html='<style>@page{size:A4;margin:0}body{margin:0}.docx-wrapper{background:none!important;padding:0!important;display:block!important}.docx-wrapper>section.docx{box-shadow:none!important;margin:0 auto!important}</style>'+$('#edoc').innerHTML;
+  let f=$('#pfr');if(!f){f=document.createElement('iframe');f.id='pfr';f.style.cssText='position:fixed;width:0;height:0;border:0';document.body.appendChild(f)}
   f.onload=()=>{f.contentWindow.focus();f.contentWindow.print()};
-  f.srcdoc='<!DOCTYPE html><html><head><meta charset="utf-8"><style>'+ESTY+'body{font-size:'+edSize+'px}</style></head><body>'+$('#edoc').innerHTML+'</body></html>'};
-$('#edw').onclick=()=>{const h='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><style>'+ESTY+'</style></head><body>'+$('#edoc').innerHTML+'</body></html>';
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+h],{type:'application/msword'}));a.download='CV.doc';document.body.appendChild(a);a.click();a.remove()};
-$('#cve').onchange=async e=>{const f=e.target.files[0];if(!f)return;const st=$('#ist');st.style.color='';st.innerHTML=tr('ird');
-  try{const n=f.name.toLowerCase();let html='',note='';
-    if(n.endsWith('.docx')){await loadJs('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');html=(await mammoth.convertToHtml({arrayBuffer:await f.arrayBuffer()})).value}
-    else{const t=await readCv(f);if(!t||t.replace(/\s/g,'').length<40)throw 0;html=txt2html(t);if(n.endsWith('.pdf'))note=' '+tr('ie4')}
-    if(html.replace(/<[^>]+>/g,'').trim().length<20)throw 0;
-    $('#edoc').innerHTML=html;$('#edn').textContent=tr('ie3')+note;openEd();st.innerHTML=''}
-  catch(x){st.innerHTML=tr('ier')+'<span class="bn" style="color:#b91c1c">ফাইল থেকে লেখা পড়া যায়নি। ছবি বা স্ক্যান নয়, লেখাসহ PDF বা Word (.docx) ফাইল দিন।</span>';st.style.color='#b91c1c'}
-  e.target.value=''};
+  f.srcdoc='<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>'+html+'</body></html>'};
 
 /* ---------- CV builder ---------- */
 const CVCSS=`@page{size:A4;margin:14mm}*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#1f2937;font-size:11pt;line-height:1.45;-webkit-print-color-adjust:exact;print-color-adjust:exact}
