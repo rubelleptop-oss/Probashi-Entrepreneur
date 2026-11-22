@@ -16,15 +16,16 @@ body{font-family:system-ui,-apple-system,'Segoe UI','Noto Sans Bengali',Kalpurus
 .btn{border-radius:12px;padding:12px 16px;font-weight:700;font-size:16px;line-height:1.3}
 .btn .bn{color:inherit;opacity:.8}
 .hidden{display:none!important}
-#pvm{position:fixed;inset:0;z-index:50;background:#94a3b8;overflow:auto}
+#pvm,#edm{position:fixed;inset:0;z-index:50;background:#94a3b8;overflow:auto}
 .chip{border:1.5px solid #c5cfdd;border-radius:999px;padding:6px 12px;background:#fff;font-size:14px;margin:0 6px 8px 0;text-align:left}
 .chip .bn{font-size:11px;margin:0}.chip.on{background:#0e4194;color:#fff;border-color:#0e4194}.chip.on .bn{color:#dbe6fb}
 .thb{background:none;text-align:center;font-size:13px;font-weight:700;flex:none}
 .th{width:160px;height:226px;overflow:hidden;border:3px solid #c5cfdd;border-radius:10px;background:#fff;margin-bottom:4px}
 .th iframe{width:794px;height:1123px;border:0;transform:scale(.2);transform-origin:0 0;pointer-events:none}
 .thb.on .th{border-color:#0e4194;box-shadow:0 0 0 3px #ffd617}
-.tbn{border:2px solid #fff;color:#fff;border-radius:8px;padding:6px 10px;font-weight:700;font-size:14px;flex:none}.tbn.on{background:#ffd617;color:#0e4194;border-color:#ffd617}
+.tbn,.etb{border:2px solid #fff;color:#fff;border-radius:8px;padding:6px 10px;font-weight:700;font-size:14px;flex:none}.tbn.on{background:#ffd617;color:#0e4194;border-color:#ffd617}
 .exs{display:block;width:100%;text-align:left;border:1.5px solid #c5cfdd;border-radius:10px;padding:8px 10px;margin-top:8px;background:#fff;font-size:14px}.exs:active{background:#e8eefb}
+#edoc{background:#fff;color:#1f2937;max-width:794px;margin:12px auto;padding:18px;min-height:70vh;outline:none;font:14px/1.45 Arial,sans-serif;overflow-wrap:anywhere}#edoc h1{font-size:1.9em;font-weight:700;margin:0 0 4px}#edoc h2{font-size:1.15em;font-weight:700;margin:14px 0 4px;border-bottom:1px solid #94a3b8}#edoc img{max-width:100%}#edoc p{margin:3px 0}#edoc td{vertical-align:top;padding:2px 6px}#edoc table{border-collapse:collapse;width:100%}#edoc ul{list-style:disc;padding-left:22px}#edoc ol{list-style:decimal;padding-left:22px}#edoc strong,#edoc b{font-weight:700}
 footer summary{cursor:pointer;font-weight:700;padding:6px 0;color:#fff}footer details p{padding:4px 0 8px}
 </style>
 </head>
@@ -81,6 +82,21 @@ footer summary{cursor:pointer;font-weight:700;padding:6px 0;color:#fff}footer de
   <p class="text-center text-xs text-white px-4 pb-6">In the print window choose "Save as PDF". <span class="bn" style="color:#e6edf9">প্রিন্ট উইন্ডোতে "Save as PDF" বেছে নিন।</span></p>
 </div>
 
+<div id="edm" class="hidden">
+  <div class="sticky top-0 z-10 p-3 bg-[#0e4194]">
+    <div class="flex gap-2">
+      <button id="edx" class="btn bg-white text-[#0e4194]"><span data-k="bk">Back to edit</span><span class="bn">ফিরে যান</span></button>
+      <button id="edp" class="btn ml-auto bg-[#ffd617] text-[#0e4194]"><span data-k="dl">Download PDF</span><span class="bn">PDF ডাউনলোড</span></button>
+      <button id="edw" class="btn bg-white text-[#0e4194]">Word<span class="bn">.doc</span></button>
+    </div>
+    <div class="flex gap-2 mt-2 overflow-x-auto">
+      <button type="button" class="etb" data-c="bold"><b>B</b></button><button type="button" class="etb" data-c="italic"><i>I</i></button><button type="button" class="etb" data-c="underline"><u>U</u></button><button type="button" class="etb" data-c="insertUnorderedList">•</button><button type="button" class="etb" data-c="undo">↶</button><button type="button" class="etb" data-c="redo">↷</button><button type="button" class="etb" data-c="fs-">A−</button><button type="button" class="etb" data-c="fs+">A+</button>
+    </div>
+    <p id="edn" class="text-xs text-blue-100 mt-2"></p>
+  </div>
+  <div id="edoc" contenteditable="true" spellcheck="false"></div>
+</div>
+
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -134,9 +150,15 @@ dl:'Download PDF|Scarica PDF|Télécharger PDF|Descargar PDF|PDF herunterladen|D
 bk:'Back to edit|Torna alla modifica|Retour|Volver|Zurück|Voltar',
 ch:'— Select —|— Seleziona —|— Choisir —|— Elegir —|— Wählen —|— Escolher —',
 ot:'Other (write it)|Altro (scrivi)|Autre (écrire)|Otro (escribir)|Andere (eintragen)|Outro (escrever)',
-iu:'Already have a CV? Upload it and the form fills itself|Hai già un CV? Caricalo e il modulo si compila da solo|Vous avez déjà un CV ? Importez-le et le formulaire se remplit tout seul|¿Ya tienes un CV? Súbelo y el formulario se rellena solo|Sie haben schon einen Lebenslauf? Laden Sie ihn hoch, das Formular füllt sich selbst|Já tem um CV? Carregue-o e o formulário preenche-se sozinho',
-ib:'Choose CV file (PDF, Word or TXT)|Scegli il file del CV (PDF, Word o TXT)|Choisir le fichier CV (PDF, Word ou TXT)|Elegir archivo de CV (PDF, Word o TXT)|CV-Datei wählen (PDF, Word oder TXT)|Escolher ficheiro do CV (PDF, Word ou TXT)',
+iu:'Already have a CV? Use it here|Hai già un CV? Usalo qui|Vous avez déjà un CV ? Utilisez-le ici|¿Ya tienes un CV? Úsalo aquí|Sie haben schon einen Lebenslauf? Nutzen Sie ihn hier|Já tem um CV? Use-o aqui',
+ib:'Fill the form from my CV file|Compila il modulo dal mio file CV|Remplir le formulaire depuis mon CV|Rellenar el formulario desde mi CV|Formular aus meiner CV-Datei ausfüllen|Preencher o formulário a partir do meu CV',
 inn:'Your file stays on your phone. After filling, check every box yourself.|Il file resta sul tuo telefono. Dopo la compilazione controlla tu ogni campo.|Le fichier reste sur votre téléphone. Après le remplissage, vérifiez chaque champ.|El archivo se queda en tu móvil. Tras rellenar, revisa cada campo.|Die Datei bleibt auf Ihrem Handy. Prüfen Sie nach dem Ausfüllen jedes Feld selbst.|O ficheiro fica no seu telemóvel. Depois de preencher, verifique cada campo.',
+rl2:'Another job you want|Un altro lavoro che cerchi|Un autre emploi recherché|Otro trabajo que buscas|Eine weitere gesuchte Stelle|Outro emprego que procura',
+ar:'+ Add another job (max 4)|+ Aggiungi un altro lavoro (max 4)|+ Ajouter un autre emploi (max 4)|+ Añadir otro trabajo (máx. 4)|+ Weitere Stelle hinzufügen (max. 4)|+ Adicionar outro emprego (máx. 4)',
+ie1:'Edit my CV as it is (keeps the layout)|Modifica il mio CV così com’è (mantiene il layout)|Modifier mon CV tel quel (garde la mise en page)|Editar mi CV tal como está (mantiene el diseño)|Meinen Lebenslauf so bearbeiten (Layout bleibt)|Editar o meu CV tal como está (mantém o layout)',
+ie2:'Word (.docx) keeps the layout. A PDF gives plain text to edit.|Word (.docx) mantiene il layout. Il PDF dà solo il testo da modificare.|Word (.docx) garde la mise en page. Le PDF donne seulement le texte à modifier.|Word (.docx) mantiene el diseño. El PDF solo da el texto para editar.|Word (.docx) behält das Layout. Bei PDF erhalten Sie nur Text zum Bearbeiten.|Word (.docx) mantém o layout. O PDF dá apenas o texto para editar.',
+ie3:'Tap the text and edit it directly.|Tocca il testo e modificalo direttamente.|Touchez le texte et modifiez-le directement.|Toca el texto y edítalo directamente.|Tippen Sie auf den Text und bearbeiten Sie ihn direkt.|Toque no texto e edite diretamente.',
+ie4:'PDF layout and photo cannot be kept, only the text.|Layout e foto del PDF non si possono mantenere, solo il testo.|La mise en page et la photo du PDF ne sont pas conservées, seulement le texte.|El diseño y la foto del PDF no se conservan, solo el texto.|Layout und Foto des PDFs bleiben nicht erhalten, nur der Text.|O layout e a foto do PDF não são mantidos, apenas o texto.',
 ird:'Reading your CV…|Lettura del CV in corso…|Lecture du CV…|Leyendo el CV…|CV wird gelesen…|A ler o CV…',
 iok:'Done. Please check every box and correct mistakes.|Fatto. Controlla ogni campo e correggi gli errori.|Terminé. Vérifiez chaque champ et corrigez les erreurs.|Hecho. Revisa cada campo y corrige los errores.|Fertig. Prüfen Sie jedes Feld und korrigieren Sie Fehler.|Feito. Verifique cada campo e corrija os erros.',
 ier:'Could not read text from this file. Use a PDF or Word (.docx) file with real text, not a photo or scan.|Impossibile leggere il testo del file. Usa un PDF o Word (.docx) con testo reale, non una foto o scansione.|Impossible de lire le texte. Utilisez un PDF ou Word (.docx) avec du vrai texte, pas une photo ou un scan.|No se pudo leer el texto. Usa un PDF o Word (.docx) con texto real, no una foto o escaneo.|Text konnte nicht gelesen werden. Nutzen Sie ein PDF oder Word (.docx) mit echtem Text, kein Foto oder Scan.|Não foi possível ler o texto. Use um PDF ou Word (.docx) com texto real, não uma foto ou digitalização.',
@@ -219,11 +241,13 @@ $('#lang').innerHTML=CVL.map(c=>`<option value="${c}">${dn(c,c)} · ${dn('bn',c)
 
 $('#app').innerHTML=`
 <section class="card" style="border:2px dashed #0e4194"><h2>${tt('iu','আগের সিভি থাকলে আপলোড করুন, ফর্ম নিজে নিজে পূরণ হয়ে যাবে')}</h2>
-<label class="btn inline-block mt-3 bg-[#0e4194] text-white cursor-pointer">${tt('ib','সিভি ফাইল বেছে নিন (PDF, Word বা TXT)')}<input id="cvf" type="file" accept=".pdf,.docx,.txt,application/pdf" class="hidden"></label>
+<label class="btn block mt-3 bg-[#0e4194] text-white cursor-pointer">${tt('ib','সিভি ফাইল বেছে নিন (PDF, Word বা TXT)')}<input id="cvf" type="file" accept=".pdf,.docx,.txt,application/pdf" class="hidden"></label>
+<label class="btn block mt-3 border-2 border-[#0e4194] text-[#0e4194] cursor-pointer">${tt('ie1','আমার সিভি যেমন আছে তেমনই এডিট করব (ডিজাইন ঠিক থাকবে)')}<input id="cve" type="file" accept=".pdf,.docx,.txt,application/pdf" class="hidden"></label>
+<p class="mt-2 text-xs text-slate-600">${tt('ie2','Word (.docx) দিলে ডিজাইন ঠিক থাকে। PDF দিলে শুধু লেখা এডিট করা যায়।')}</p>
 <p id="ist" class="mt-3 text-sm font-semibold"></p><p class="mt-2 text-xs text-slate-600">${tt('inn','ফাইল আপনার ফোনেই থাকে। ফর্ম পূরণ হওয়ার পর প্রতিটি ঘর নিজে দেখে নিন।')}</p></section>
 <section class="card"><h2>1. ${tt('s2','ব্যক্তিগত তথ্য')}</h2>
 ${fld('nm','nm','পুরো নাম (পাসপোর্টের মতো), যেমন: Mohammad Rahman','text','Mohammad Rahman')}
-${sel('rl','rl','আপনি কোন কাজ খুঁজছেন (তালিকা থেকে বেছে নিন)','jobs')}
+<div id="rls"></div>${add('addRl','ar','+ আরেকটি কাজ যোগ করুন (সর্বোচ্চ ৪টি)')}
 <label class="block mt-3 text-sm font-semibold">${tt('pn','ফোন নম্বর (দেশের কোডসহ)')}<div class="flex gap-2"><select class="in phc" style="width:46%">${CODES.split(';').map(x=>`<option value="${x.split(' ')[0]}">${x}</option>`).join('')}</select><input class="in phn" type="tel" placeholder="345 000 0000"></div></label>
 ${fld('em','em','ইমেইল ঠিকানা','email','name@email.com')}
 ${fld('str','ad','রাস্তা ও শহর','text','Via Roma 10, Milano')}
@@ -268,11 +292,13 @@ ${sel('eq','qu','ডিগ্রি বা কোর্স (আগে উপর�
 <div class="grid grid-cols-2 gap-3">${fld('df','fr','শুরুর মাস','month')}${fld('de','to','শেষের মাস','month')}</div>${rmb()}</div>`;
 const lgH=(c='en',v='B1')=>`<div class="item lgr"><label class="block mt-3 text-sm font-semibold">${tt('lg','ভাষা')}<select class="in lc">${SPOKEN.map(x=>`<option value="${x}" data-lc="${x}" ${x===c?'selected':''}>${dn(cur,x)} (${dn('bn',x)})</option>`).join('')}</select></label>
 <label class="block mt-3 text-sm font-semibold">${tt('lv','কতটা পারেন')}<select class="in lv">${LS.lv.map((r,i)=>{const k=r[0]==='Native'?'N':r[0].split(' ')[0];return `<option value="${k}" ${k===v?'selected':''} data-l="lv" data-i="${i}">${r[col()]} (${r[1]})</option>`}).join('')}</select></label>${rmb()}</div>`;
+const rlH=i=>`<div class="rlr">${sel('rl',i?'rl2':'rl',i?'আরেকটি কাজ যা খুঁজছেন':'আপনি কোন কাজ খুঁজছেন (তালিকা থেকে বেছে নিন, সর্বোচ্চ ৪টি)','jobs')}${i?rmb():''}</div>`;
+function chkRl(){$('#addRl').classList.toggle('hidden',$$('.rlr').length>=4)}
 const put=(id,h)=>$(id).insertAdjacentHTML('beforeend',h);
-put('#exp',expH());put('#edu',eduH());put('#lgs',lgH('bn','N'));put('#lgs',lgH('en','A2'));
+put('#rls',rlH(0));$('#addRl').onclick=()=>{if($$('.rlr').length<4){put('#rls',rlH(1));chkRl()}};put('#exp',expH());put('#edu',eduH());put('#lgs',lgH('bn','N'));put('#lgs',lgH('en','A2'));
 $('#addExp').onclick=()=>put('#exp',expH());$('#addEdu').onclick=()=>put('#edu',eduH());$('#addLg').onclick=()=>put('#lgs',lgH());
 
-document.addEventListener('click',e=>{const r=e.target.closest('.rm');if(r)r.closest('.item').remove();const c=e.target.closest('.chip');if(c)c.classList.toggle('on')});
+document.addEventListener('click',e=>{const r=e.target.closest('.rm');if(r){r.closest('.item,.rlr').remove();chkRl()}const c=e.target.closest('.chip');if(c)c.classList.toggle('on')});
 document.addEventListener('change',e=>{const t=e.target;
   if(t.classList.contains('so'))t.closest('label').nextElementSibling.classList.toggle('hidden',t.value!=='__o');
   if(t.classList.contains('er')){const b=t.closest('.edu');b.querySelector('.eq').innerHTML=selOpts(t.value==='bd'?'qb':'qe');b.querySelector('.eqo').classList.add('hidden')}});
@@ -363,7 +389,7 @@ function fillCv(o){
   sv('nm',o.nm);sv('em',o.em);sv('str',o.ad);sv('sm',o.sm);sv('dob',o.dob);
   if(o.ph){let ph=o.ph,code='';if(/^\+\d/.test(ph)){const cs=[...$('.phc').options].map(x=>x.value).sort((a,b)=>b.length-a.length);code=cs.find(c=>ph.replace(/\s/g,'').startsWith(c))||''}
     if(code){$('.phc').value=code;ph=ph.replace(/\s/g,'').slice(code.length)}$('.phn').value=ph.replace(/^[\s.-]+/,'')}
-  ['rl','cty','nat','gen','wp'].forEach(c=>setSel(document,c,{rl:o.rl,cty:o.co,nat:o.nat,gen:o.gen,wp:o.wp}[c]));
+  setSel($('.rlr'),'rl',o.rl);['cty','nat','gen','wp'].forEach(c=>setSel(document,c,{cty:o.co,nat:o.nat,gen:o.gen,wp:o.wp}[c]));
   if(o.sk.length)$$('.chip').forEach(c=>c.classList.toggle('on',o.sk.includes(c.dataset.v)));
   if(o.ex.length){$('#exp').innerHTML='';o.ex.forEach(e=>{put('#exp',expH());const b=$('#exp').lastElementChild;setSel(b,'xt',e.t);bv(b,'xc',e.o);bv(b,'xf',e.f);bv(b,'xe',e.e);b.querySelector('.xp').checked=!!e.cur})}
   if(o.ed.length){$('#edu').innerHTML='';o.ed.forEach(e=>{put('#edu',eduH());const b=$('#edu').lastElementChild,er=b.querySelector('.er');er.value=e.r;er.dispatchEvent(new Event('change',{bubbles:true}));setSel(b,'eq',e.t);bv(b,'ds',e.o);bv(b,'df',e.f);bv(b,'de',e.e)})}
@@ -373,6 +399,29 @@ $('#cvf').onchange=async e=>{const f=e.target.files[0];if(!f)return;const st=$('
   st.innerHTML=tr('ird');
   try{const t=await readCv(f);if(!t||t.replace(/\s/g,'').length<40)throw 0;const o=parseCv(t);fillCv(o);
     st.innerHTML=tr('iok')+'<span class="bn" style="color:#166534">ফর্ম পূরণ হয়েছে। প্রতিটি ঘর ভালো করে দেখুন এবং ভুল থাকলে ঠিক করুন।</span>';st.style.color='#166534'}
+  catch(x){st.innerHTML=tr('ier')+'<span class="bn" style="color:#b91c1c">ফাইল থেকে লেখা পড়া যায়নি। ছবি বা স্ক্যান নয়, লেখাসহ PDF বা Word (.docx) ফাইল দিন।</span>';st.style.color='#b91c1c'}
+  e.target.value=''};
+
+/* ---------- edit an existing CV directly (keeps Word layout) ---------- */
+let edSize=14;
+const ESTY='body{font-family:Arial,Helvetica,sans-serif;color:#1f2937;line-height:1.45}h1{font-size:1.9em;margin:0 0 4px}h2{font-size:1.15em;margin:14px 0 4px;border-bottom:1px solid #94a3b8;padding-bottom:2px}p{margin:3px 0}img{max-width:100%}table{border-collapse:collapse;width:100%}td{vertical-align:top;padding:2px 6px}ul{list-style:disc;padding-left:22px}ol{list-style:decimal;padding-left:22px}@page{size:A4;margin:14mm}';
+const txt2html=t=>t.replace(/\r/g,'').split('\n').map(x=>x.trim()).filter(Boolean).map((l,i)=>i===0&&l.length<50?`<h1>${esc(l)}</h1>`:hdr(l)?`<h2>${esc(l)}</h2>`:`<p>${esc(l)}</p>`).join('');
+const openEd=()=>{$('#edoc').style.fontSize=edSize+'px';$('#edm').classList.remove('hidden');document.body.style.overflow='hidden';$('#edm').scrollTop=0};
+$('#edx').onclick=()=>{$('#edm').classList.add('hidden');document.body.style.overflow=''};
+$('#edm').addEventListener('mousedown',e=>{if(e.target.closest('.etb'))e.preventDefault()});
+$('#edm').addEventListener('click',e=>{const b=e.target.closest('.etb');if(!b)return;const c=b.dataset.c;
+  if(c==='fs-'||c==='fs+'){edSize=Math.max(10,Math.min(22,edSize+(c==='fs+'?1:-1)));$('#edoc').style.fontSize=edSize+'px'}else document.execCommand(c)});
+$('#edp').onclick=()=>{let f=$('#pfr');if(!f){f=document.createElement('iframe');f.id='pfr';f.style.cssText='position:fixed;width:0;height:0;border:0';document.body.appendChild(f)}
+  f.onload=()=>{f.contentWindow.focus();f.contentWindow.print()};
+  f.srcdoc='<!DOCTYPE html><html><head><meta charset="utf-8"><style>'+ESTY+'body{font-size:'+edSize+'px}</style></head><body>'+$('#edoc').innerHTML+'</body></html>'};
+$('#edw').onclick=()=>{const h='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><style>'+ESTY+'</style></head><body>'+$('#edoc').innerHTML+'</body></html>';
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+h],{type:'application/msword'}));a.download='CV.doc';document.body.appendChild(a);a.click();a.remove()};
+$('#cve').onchange=async e=>{const f=e.target.files[0];if(!f)return;const st=$('#ist');st.style.color='';st.innerHTML=tr('ird');
+  try{const n=f.name.toLowerCase();let html='',note='';
+    if(n.endsWith('.docx')){await loadJs('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');html=(await mammoth.convertToHtml({arrayBuffer:await f.arrayBuffer()})).value}
+    else{const t=await readCv(f);if(!t||t.replace(/\s/g,'').length<40)throw 0;html=txt2html(t);if(n.endsWith('.pdf'))note=' '+tr('ie4')}
+    if(html.replace(/<[^>]+>/g,'').trim().length<20)throw 0;
+    $('#edoc').innerHTML=html;$('#edn').textContent=tr('ie3')+note;openEd();st.innerHTML=''}
   catch(x){st.innerHTML=tr('ier')+'<span class="bn" style="color:#b91c1c">ফাইল থেকে লেখা পড়া যায়নি। ছবি বা স্ক্যান নয়, লেখাসহ PDF বা Word (.docx) ফাইল দিন।</span>';st.style.color='#b91c1c'}
   e.target.value=''};
 
@@ -407,14 +456,15 @@ function cvHtml(d,t,loc){
   if(d.sk.length)s+=sec(Q.k,`<div class="sk">${d.sk.map(k=>`<span>${esc(x(k))}</span>`).join('')}</div>`);
   const ad=[d.ad,d.co&&x(d.co)].filter(Boolean).join(', ');
   const ct=[d.ph&&['',d.ph],d.em&&['',d.em],ad&&['',ad],d.nat&&[N[0],x(d.nat)],d.dob&&[N[1],dd(d.dob)],d.gen&&[GL[loc]||GL.en,x(d.gen)],d.wp&&[WL[loc]||WL.en,x(d.wp)]].filter(Boolean);
-  const hd=`<div class="hd"><div><h1>${esc(d.nm)}</h1>${d.rl?`<div class="t">${esc(x(d.rl))}</div>`:''}${ct.length?`<div class="ct">${ct.map(a=>`<span>${a[0]?`<i>${esc(a[0])}:</i> `:''}${esc(a[1])}</span>`).join('')}</div>`:''}</div>${d.photo?`<img alt="" src="${d.photo}">`:''}</div>`;
+  const rls=[].concat(d.rl||[]).filter(Boolean).map(v=>x(v)).join(' · ');
+  const hd=`<div class="hd"><div><h1>${esc(d.nm)}</h1>${rls?`<div class="t">${esc(rls)}</div>`:''}${ct.length?`<div class="ct">${ct.map(a=>`<span>${a[0]?`<i>${esc(a[0])}:</i> `:''}${esc(a[1])}</span>`).join('')}</div>`:''}</div>${d.photo?`<img alt="" src="${d.photo}">`:''}</div>`;
   return `<!DOCTYPE html><html lang="${loc}"><head><meta charset="utf-8"><title>${esc(d.nm)} CV</title><style>${CVCSS}</style></head><body><div class="pg ${t}">${hd}<div class="cols"><div class="main">${m}</div><div class="side">${s}</div></div>${d.gp?`<div class="gdpr">${GP[loc]||GP.en}</div>`:''}</div></body></html>`;
 }
 
 function collect(){
   const g=c=>($('.'+c).value||'').trim(),doc=document;
   const q=(e,c)=>(e.querySelector('.'+c).value||'').trim();
-  return{nm:g('nm'),rl:gv(doc,'rl'),photo,sm:g('sm'),ph:g('phn')?g('phc')+' '+g('phn'):'',em:g('em'),ad:g('str'),co:gv(doc,'cty'),nat:gv(doc,'nat'),dob:g('dob'),gen:gv(doc,'gen'),wp:gv(doc,'wp'),gp:$('#gpc').checked,
+  return{nm:g('nm'),rl:$$('.rlr').map(r=>gv(r,'rl')).filter(Boolean),photo,sm:g('sm'),ph:g('phn')?g('phc')+' '+g('phn'):'',em:g('em'),ad:g('str'),co:gv(doc,'cty'),nat:gv(doc,'nat'),dob:g('dob'),gen:gv(doc,'gen'),wp:gv(doc,'wp'),gp:$('#gpc').checked,
     ex:$$('.exp').map(e=>({t:gv(e,'xt'),o:q(e,'xc'),l:q(e,'xl'),f:q(e,'xf'),e:q(e,'xe'),cur:e.querySelector('.xp').checked,d:''})),
     ed:$$('.edu').map(e=>({t:gv(e,'eq'),o:q(e,'ds'),l:q(e,'dl')||(e.querySelector('.er').value==='bd'?'Bangladesh':''),f:q(e,'df'),e:q(e,'de')})),
     lg:$$('.lgr').map(e=>[e.querySelector('.lc').value,e.querySelector('.lv').value]),
@@ -423,7 +473,7 @@ function collect(){
 
 /* ---------- example CVs + design picker ---------- */
 const AV="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23cfd8e6'/%3E%3Ccircle cx='20' cy='15' r='7' fill='%23fff'/%3E%3Cpath d='M6 40c2-12 26-12 28 0z' fill='%23fff'/%3E%3C/svg%3E";
-const S={nm:'Mohammad Rahman',rl:'Cook',photo:AV,sm:LS.ex[1][0],ph:'+39 345 000 0000',em:'name@email.com',ad:'Via Roma 10, Milano',co:'Italy',nat:'Bangladeshi',dob:'1992-05-14',gen:'Male',wp:'Italy',gp:true,
+const S={nm:'Mohammad Rahman',rl:['Cook','Pizza maker'],photo:AV,sm:LS.ex[1][0],ph:'+39 345 000 0000',em:'name@email.com',ad:'Via Roma 10, Milano',co:'Italy',nat:'Bangladeshi',dob:'1992-05-14',gen:'Male',wp:'Italy',gp:true,
  ex:[{t:'Cook',o:'Pizzeria Roma',l:'Milano, Italy',f:'2021-03',e:'',cur:true,d:''},{t:'Kitchen assistant',o:'Hotel Centrale',l:'Roma, Italy',f:'2019-01',e:'2021-02',cur:false,d:''}],
  ed:[{t:'High school diploma',o:'City High School',l:'Dhaka, Bangladesh',f:'2012-02',e:'2014-12'}],lg:[['bn','N'],['it','B1'],['en','A2']],sk:['Cooking','Teamwork','Food safety (HACCP)','Reliable']};
 const thumb=(t,n,cls)=>`<button type="button" class="thb ${cls}" data-t="${t}"><div class="th"><iframe tabindex="-1" title="${n}" srcdoc="${esc(cvHtml(S,t,'en'))}"></iframe></div>${n}</button>`;
