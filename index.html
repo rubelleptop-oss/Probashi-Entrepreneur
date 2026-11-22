@@ -134,6 +134,12 @@ dl:'Download PDF|Scarica PDF|Télécharger PDF|Descargar PDF|PDF herunterladen|D
 bk:'Back to edit|Torna alla modifica|Retour|Volver|Zurück|Voltar',
 ch:'— Select —|— Seleziona —|— Choisir —|— Elegir —|— Wählen —|— Escolher —',
 ot:'Other (write it)|Altro (scrivi)|Autre (écrire)|Otro (escribir)|Andere (eintragen)|Outro (escrever)',
+iu:'Already have a CV? Upload it and the form fills itself|Hai già un CV? Caricalo e il modulo si compila da solo|Vous avez déjà un CV ? Importez-le et le formulaire se remplit tout seul|¿Ya tienes un CV? Súbelo y el formulario se rellena solo|Sie haben schon einen Lebenslauf? Laden Sie ihn hoch, das Formular füllt sich selbst|Já tem um CV? Carregue-o e o formulário preenche-se sozinho',
+ib:'Choose CV file (PDF, Word or TXT)|Scegli il file del CV (PDF, Word o TXT)|Choisir le fichier CV (PDF, Word ou TXT)|Elegir archivo de CV (PDF, Word o TXT)|CV-Datei wählen (PDF, Word oder TXT)|Escolher ficheiro do CV (PDF, Word ou TXT)',
+inn:'Your file stays on your phone. After filling, check every box yourself.|Il file resta sul tuo telefono. Dopo la compilazione controlla tu ogni campo.|Le fichier reste sur votre téléphone. Après le remplissage, vérifiez chaque champ.|El archivo se queda en tu móvil. Tras rellenar, revisa cada campo.|Die Datei bleibt auf Ihrem Handy. Prüfen Sie nach dem Ausfüllen jedes Feld selbst.|O ficheiro fica no seu telemóvel. Depois de preencher, verifique cada campo.',
+ird:'Reading your CV…|Lettura del CV in corso…|Lecture du CV…|Leyendo el CV…|CV wird gelesen…|A ler o CV…',
+iok:'Done. Please check every box and correct mistakes.|Fatto. Controlla ogni campo e correggi gli errori.|Terminé. Vérifiez chaque champ et corrigez les erreurs.|Hecho. Revisa cada campo y corrige los errores.|Fertig. Prüfen Sie jedes Feld und korrigieren Sie Fehler.|Feito. Verifique cada campo e corrija os erros.',
+ier:'Could not read text from this file. Use a PDF or Word (.docx) file with real text, not a photo or scan.|Impossibile leggere il testo del file. Usa un PDF o Word (.docx) con testo reale, non una foto o scansione.|Impossible de lire le texte. Utilisez un PDF ou Word (.docx) avec du vrai texte, pas une photo ou un scan.|No se pudo leer el texto. Usa un PDF o Word (.docx) con texto real, no una foto o escaneo.|Text konnte nicht gelesen werden. Nutzen Sie ein PDF oder Word (.docx) mit echtem Text, kein Foto oder Scan.|Não foi possível ler o texto. Use um PDF ou Word (.docx) com texto real, não uma foto ou digitalização.',
 wp:'Work permit (country)|Permesso di lavoro (paese)|Permis de travail (pays)|Permiso de trabajo (país)|Arbeitserlaubnis (Land)|Autorização de trabalho (país)',
 gp:'Add the data-protection line at the bottom of the CV|Aggiungi in fondo al CV la frase di autorizzazione al trattamento dei dati|Ajouter en bas du CV la mention d’autorisation de traitement des données|Añadir al final del CV la frase de autorización de tratamiento de datos|Am Ende des Lebenslaufs den Hinweis zur Datenverarbeitung einfügen|Adicionar no fim do CV a frase de autorização de tratamento de dados',
 na:'Nationality|Nazionalità|Nationalité|Nacionalidad|Staatsangehörigkeit|Nacionalidade',
@@ -212,6 +218,9 @@ const reg=`<option value="" data-k="ch" data-b="বেছে নিন">${tr('ch
 $('#lang').innerHTML=CVL.map(c=>`<option value="${c}">${dn(c,c)} · ${dn('bn',c)}</option>`).join('');
 
 $('#app').innerHTML=`
+<section class="card" style="border:2px dashed #0e4194"><h2>${tt('iu','আগের সিভি থাকলে আপলোড করুন, ফর্ম নিজে নিজে পূরণ হয়ে যাবে')}</h2>
+<label class="btn inline-block mt-3 bg-[#0e4194] text-white cursor-pointer">${tt('ib','সিভি ফাইল বেছে নিন (PDF, Word বা TXT)')}<input id="cvf" type="file" accept=".pdf,.docx,.txt,application/pdf" class="hidden"></label>
+<p id="ist" class="mt-3 text-sm font-semibold"></p><p class="mt-2 text-xs text-slate-600">${tt('inn','ফাইল আপনার ফোনেই থাকে। ফর্ম পূরণ হওয়ার পর প্রতিটি ঘর নিজে দেখে নিন।')}</p></section>
 <section class="card"><h2>1. ${tt('s2','ব্যক্তিগত তথ্য')}</h2>
 ${fld('nm','nm','পুরো নাম (পাসপোর্টের মতো), যেমন: Mohammad Rahman','text','Mohammad Rahman')}
 ${sel('rl','rl','আপনি কোন কাজ খুঁজছেন (তালিকা থেকে বেছে নিন)','jobs')}
@@ -274,6 +283,98 @@ let photo='',tpl='t1';
 const showPh=()=>{$('#pp').innerHTML=photo?`<img alt="" src="${photo}" style="width:100%;height:100%;object-fit:cover">`:'';$('#pr').classList.toggle('hidden',!photo)};
 $('#pf').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const s=Math.min(1,500/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);photo=c.toDataURL('image/jpeg',.85);showPh()};im.src=r.result};r.readAsDataURL(f)};
 $('#pr').onclick=()=>{photo='';$('#pf').value='';showPh()};
+
+/* ---------- import an existing CV (runs in the browser, nothing is uploaded) ---------- */
+const nz=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const loadJs=u=>new Promise((ok,no)=>{const e=document.createElement('script');e.src=u;e.onload=ok;e.onerror=no;document.head.appendChild(e)});
+async function readCv(f){
+  const n=f.name.toLowerCase();
+  if(n.endsWith('.txt'))return await f.text();
+  const buf=await f.arrayBuffer();
+  if(n.endsWith('.docx')){await loadJs('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');return(await mammoth.extractRawText({arrayBuffer:buf})).value}
+  if(n.endsWith('.pdf')){const B='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';await loadJs(B+'pdf.min.js');pdfjsLib.GlobalWorkerOptions.workerSrc=B+'pdf.worker.min.js';
+    const pdf=await pdfjsLib.getDocument({data:buf}).promise;let out='';
+    for(let i=1;i<=pdf.numPages;i++){const tc=await(await pdf.getPage(i)).getTextContent();let y=null;for(const it of tc.items){const yy=it.transform[5];if(y!==null&&Math.abs(yy-y)>3)out+='\n';else if(y!==null&&out&&!/\s$/.test(out))out+=' ';out+=it.str;y=yy}out+='\n'}
+    return out}
+  return'';
+}
+const SEC={
+exp:['work experience','professional experience','experience','employment','work history','esperienza lavorativa','esperienze lavorative','esperienza professionale','esperienze professionali','experience professionnelle','experiencia laboral','experiencia profesional','berufserfahrung','experiencia','experiencia profissional'],
+edu:['education','education and training','istruzione','formazione','istruzione e formazione','formation','education et formation','educacion','formacion','formacion academica','ausbildung','bildung','formacao','educacao'],
+lang:['languages','language skills','lingue','competenze linguistiche','langues','idiomas','sprachen','sprachkenntnisse','linguas'],
+skills:['skills','key skills','competenze','altre competenze','competences','habilidades','kenntnisse','competencias','capacita','skills and competences'],
+sum:['profile','professional profile','summary','professional summary','about me','about','objective','profilo','profilo professionale','obiettivo','profil','profil professionnel','perfil','perfil profissional','berufsprofil','uber mich','sobre mim','sobre mi'],
+oth:['interests','hobbies','references','referenze','interessi','certificates','certificazioni','courses','corsi','additional information','informazioni aggiuntive','personal information','dati personali','informazioni personali','contacts','contatti','contact','privacy']};
+const hdr=l=>{const n=nz(l).replace(/[:：\s]+$/,'').trim();if(!n||n.length>40)return null;for(const k in SEC)if(SEC[k].includes(n))return k;return null};
+const esr=w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const rowHits=(list,t)=>{t=nz(t);const out=[];for(const r of list){let bl=0;for(let c=0;c<r.length;c++){if(c===1)continue;for(const v of(r[c]||'').split(' / ')){const w=nz(v).replace(/\s*\(.*\)/,'').trim();if(w.length>=4&&w.length>bl&&new RegExp('(^|[^a-z])'+esr(w)+'([^a-z]|$)').test(t))bl=w.length}}if(bl)out.push([r[0],bl])}return out};
+const matchRow=(list,t)=>{const h=rowHits(list,t).sort((a,b)=>b[1]-a[1]);return h.length?h[0][0]:''};
+const MON={jan:1,gen:1,ene:1,feb:2,fev:2,mar:3,apr:4,avr:4,abr:4,may:5,mag:5,mai:5,jun:6,giu:6,jul:7,lug:7,aug:8,ago:8,aou:8,sep:9,set:9,oct:10,ott:10,out:10,nov:11,dec:12,dic:12,dez:12};
+const TOK='(?:(?:0?[1-9]|1[0-2])[\\/.\\-](?:19|20)\\d{2}|(?:19|20)\\d{2}[\\/.\\-](?:0?[1-9]|1[0-2])(?!\\d)|[A-Za-zÀ-ÿ]{3,9}\\.?\\s+(?:19|20)\\d{2}|(?:19|20)\\d{2})';
+const PRES='(?:present|current|now|ongoing|today|oggi|presente|attuale|attualmente|actuel|actuellement|actualidad|actualmente|heute|aktuell|atual|atualmente)';
+const RNG=new RegExp('('+TOK+')(?:\\s*[–—-]\\s*|\\s+(?:to|a|al|à|bis|até|until)\\s+)('+TOK+'|'+PRES+')','i');
+const toYM=(t,end)=>{t=nz(t).trim();let m;if(new RegExp('^'+PRES+'$').test(t))return'';
+  if(m=t.match(/^(\d{1,2})[\/.\-](\d{4})$/))return m[2]+'-'+m[1].padStart(2,'0');
+  if(m=t.match(/^(\d{4})[\/.\-](\d{1,2})$/))return m[1]+'-'+m[2].padStart(2,'0');
+  if(m=t.match(/^([a-z]{3,9})\.?\s+(\d{4})$/)){const w=m[1],k=w.startsWith('juil')?7:w.startsWith('juin')?6:MON[w.slice(0,3)];if(k)return m[2]+'-'+String(k).padStart(2,'0')}
+  if(m=t.match(/^(\d{4})$/))return m[1]+(end?'-12':'-01');return''};
+const trim2=x=>x.replace(/^[\s,|:–—•·*-]+|[\s,|:–—•·*-]+$/g,'');
+function entries(lines){const out=[];
+  lines.forEach((l,i)=>{const m=l.match(RNG);
+    if(m){let rest=trim2(l.replace(RNG,''));const e={f:toYM(m[1],0),e:toYM(m[2],1),cur:new RegExp('^'+PRES+'$').test(nz(m[2]).trim()),ctx:[]};
+      if(rest)e.ctx.push(rest);else if(i>0&&!RNG.test(lines[i-1])){const pv=lines[i-1];if(out.length&&out[out.length-1].ctx[out[out.length-1].ctx.length-1]===pv)out[out.length-1].ctx.pop();e.ctx.push(pv)}
+      out.push(e)}
+    else if(out.length)out[out.length-1].ctx.push(l)});
+  return out.map(e=>({...e,ctx:e.ctx.filter(Boolean).slice(0,3)}))}
+const pieces=ctx=>ctx.flatMap(c=>c.split(/\s*[|–—]\s*|\s-\s|,\s|\s(?:at|presso|chez|en|bei|na)\s/i)).map(trim2).filter(x=>x.length>1&&x.length<60);
+const tc=x=>x===x.toUpperCase()?x.toLowerCase().replace(/(^|\s|-)(\p{L})/gu,(m,a,b)=>a+b.toUpperCase()):x;
+const LN=()=>SPOKEN.map(c=>[c,[...new Set(['en','it','fr','es','de','pt','bn'].map(l=>nz(dn(l,c))).concat(c==='bn'?['bengali','bangla','bengalese','bengalisch']:[]))].filter(x=>x.length>=3)]);
+
+function parseCv(text){
+  const raw=text.replace(/\r/g,'').split('\n').map(x=>x.replace(/\s+/g,' ').trim()).filter(Boolean);
+  const sec={head:[]};let k='head';
+  raw.forEach(l=>{const h=hdr(l);if(h){k=h;sec[h]=sec[h]||[]}else(sec[k]=sec[k]||[]).push(l)});
+  const all=raw.join('\n'),o={};
+  o.em=(all.match(/[\w.+-]+@[\w-]+\.[\w.-]+/)||[''])[0];
+  const pc=(all.match(/\+?\d[\d\s().-]{7,18}\d/g)||[]).filter(x=>{const d=x.replace(/\D/g,'');return d.length>=9&&d.length<=15&&!/(19|20)\d{2}\s*[-–.]\s*(19|20)\d{2}/.test(x)&&!/\d\/\d/.test(x)});
+  o.ph=(pc[0]||'').trim();
+  const nm=(sec.head.find(l=>!/[\d@\/:]/.test(l)&&l.split(' ').length>=2&&l.split(' ').length<=4&&l.length<40&&!/curriculum|resume|\bcv\b|europass/i.test(l))||'');o.nm=nm?tc(nm):'';
+  o.rl=matchRow(LS.jobs,raw.slice(0,8).join(' '));
+  const al=raw.slice(0,25).find(l=>/\b(via|viale|piazza|corso|strada|street|road|avenue|rue|calle|strasse|rua|avenida)\b|stra(ss|ß)e/i.test(nz(l)));
+  o.ad=al?trim2(al.replace(/[\w.+-]+@[\w-]+\.[\w.-]+/,'').replace(/\+?\d[\d\s().-]{7,18}\d/,'').replace(/^(address|indirizzo|adresse|direccion|endereco|residenza|domicilio)\s*:?/i,'')):'';
+  o.co=al?matchRow(LS.ctry,al+' '+(raw[raw.indexOf(al)+1]||'')):'';
+  o.dob='';for(const l of raw){const m=l.match(/(\d{1,2})[\/.\-](\d{1,2})[\/.\-]((?:19|20)\d{2})/);if(m&&+m[3]>=1940&&+m[3]<=2008&&+m[2]<=12&&(/(nato|nata|nascita|born|birth|naissance|nacimiento|geboren|nascimento|dob)/.test(nz(l))||raw.indexOf(l)<15)){o.dob=m[3]+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0');break}}
+  const gl=raw.find(l=>/(sex|sesso|gender|sexe|sexo|geschlecht)/.test(nz(l)))||'';
+  o.gen=/\b(femmina|female|femme|mujer|weiblich|feminino)\b/.test(nz(gl))?'Female':/\b(maschio|male|homme|hombre|mannlich|masculino)\b/.test(nz(gl))?'Male':'';
+  const nl=raw.find(l=>/(nationality|nazionalita|nationalite|nacionalidad|staatsangehorigkeit|nacionalidade|cittadinanza)/.test(nz(l)))||'';o.nat=nl?matchRow(LS.nat,nl):'';
+  const wl=raw.find(l=>/(permesso|permit|permis|permiso|erlaubnis|autorizacao)/.test(nz(l)))||'';o.wp=wl?matchRow(LS.wc,wl):'';
+  o.sm=(sec.sum||[]).join(' ').slice(0,450);
+  o.sk=rowHits(LS.sk,all).map(h=>h[0]);
+  o.lg=[];const LNs=LN();(sec.lang||[]).forEach(l=>{const t=nz(l);LNs.forEach(([c,ns])=>{if(o.lg.some(x=>x.c===c))return;if(ns.some(n=>new RegExp('(^|[^a-z])'+esr(n)+'([^a-z]|$)').test(t))){const m=l.match(/\b([ABC][12])\b/);o.lg.push({c,v:/(madrelingua|native|mother tongue|langue maternelle|lengua materna|muttersprache|lingua madre|lingua materna)/.test(t)||(c==='bn'&&!m)?'N':m?m[1]:'B1'})}})});
+  o.ex=entries(sec.exp||[]).slice(0,8).map(e=>{const t=e.ctx.join(' | '),ti=matchRow(LS.jobs,t),pp=pieces(e.ctx),tt0=ti||pp[0]||'',ix=ti?Math.max(0,pp.findIndex(x=>matchRow(LS.jobs,x)===ti)):0,isT=x=>ti&&matchRow(LS.jobs,x)===ti;return{f:e.f,e:e.e,cur:e.cur,t:tt0,o:pp.slice(ix+1).find(x=>!isT(x))||pp.filter((x,i)=>i!==ix&&!isT(x))[0]||''}});
+  let ed=entries(sec.edu||[]);if(!ed.length&&(sec.edu||[]).length)ed=[{f:'',e:'',ctx:sec.edu.slice(0,2)}];
+  o.ed=ed.slice(0,5).map(e=>{const t=e.ctx.join(' | '),q=matchRow(LS.qb.concat(LS.qe),t),pp=pieces(e.ctx);return{f:e.f,e:e.e,t:q||pp[0]||'',o:pp.find(x=>/(school|scuola|istituto|universit|college|liceo|institut|madrasa|lycee|schule|escuela|colegio|academy)/.test(nz(x)))||pp[1]||'',r:/bangladesh|dhaka|chattogram|chittagong|sylhet|khulna|rajshahi|barisal|rangpur|cumilla|comilla/.test(nz(t))?'bd':'eu'}});
+  return o}
+
+function setSel(root,c,v){if(!v)return;const s=root.querySelector('.'+c),o=root.querySelector('.'+c+'o');if(!s)return;
+  if([...s.options].some(x=>x.value===v)){s.value=v;o.classList.add('hidden')}else{s.value='__o';o.value=v;o.classList.remove('hidden')}}
+function fillCv(o){
+  const sv=(c,v)=>{const e=$('.'+c);if(e&&v)e.value=v},bv=(b,c,v)=>{const e=b.querySelector('.'+c);if(e&&v)e.value=v};
+  sv('nm',o.nm);sv('em',o.em);sv('str',o.ad);sv('sm',o.sm);sv('dob',o.dob);
+  if(o.ph){let ph=o.ph,code='';if(/^\+\d/.test(ph)){const cs=[...$('.phc').options].map(x=>x.value).sort((a,b)=>b.length-a.length);code=cs.find(c=>ph.replace(/\s/g,'').startsWith(c))||''}
+    if(code){$('.phc').value=code;ph=ph.replace(/\s/g,'').slice(code.length)}$('.phn').value=ph.replace(/^[\s.-]+/,'')}
+  ['rl','cty','nat','gen','wp'].forEach(c=>setSel(document,c,{rl:o.rl,cty:o.co,nat:o.nat,gen:o.gen,wp:o.wp}[c]));
+  if(o.sk.length)$$('.chip').forEach(c=>c.classList.toggle('on',o.sk.includes(c.dataset.v)));
+  if(o.ex.length){$('#exp').innerHTML='';o.ex.forEach(e=>{put('#exp',expH());const b=$('#exp').lastElementChild;setSel(b,'xt',e.t);bv(b,'xc',e.o);bv(b,'xf',e.f);bv(b,'xe',e.e);b.querySelector('.xp').checked=!!e.cur})}
+  if(o.ed.length){$('#edu').innerHTML='';o.ed.forEach(e=>{put('#edu',eduH());const b=$('#edu').lastElementChild,er=b.querySelector('.er');er.value=e.r;er.dispatchEvent(new Event('change',{bubbles:true}));setSel(b,'eq',e.t);bv(b,'ds',e.o);bv(b,'df',e.f);bv(b,'de',e.e)})}
+  if(o.lg.length){$('#lgs').innerHTML='';o.lg.forEach(l=>put('#lgs',lgH(l.c,l.v)))}
+}
+$('#cvf').onchange=async e=>{const f=e.target.files[0];if(!f)return;const st=$('#ist');
+  st.innerHTML=tr('ird');
+  try{const t=await readCv(f);if(!t||t.replace(/\s/g,'').length<40)throw 0;const o=parseCv(t);fillCv(o);
+    st.innerHTML=tr('iok')+'<span class="bn" style="color:#166534">ফর্ম পূরণ হয়েছে। প্রতিটি ঘর ভালো করে দেখুন এবং ভুল থাকলে ঠিক করুন।</span>';st.style.color='#166534'}
+  catch(x){st.innerHTML=tr('ier')+'<span class="bn" style="color:#b91c1c">ফাইল থেকে লেখা পড়া যায়নি। ছবি বা স্ক্যান নয়, লেখাসহ PDF বা Word (.docx) ফাইল দিন।</span>';st.style.color='#b91c1c'}
+  e.target.value=''};
 
 /* ---------- CV builder ---------- */
 const CVCSS=`@page{size:A4;margin:14mm}*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#1f2937;font-size:11pt;line-height:1.45;-webkit-print-color-adjust:exact;print-color-adjust:exact}
